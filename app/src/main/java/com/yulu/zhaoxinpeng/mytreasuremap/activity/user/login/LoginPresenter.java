@@ -1,6 +1,14 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login;
 
-import android.os.AsyncTask;
+import android.util.Log;
+
+import com.yulu.zhaoxinpeng.mytreasuremap.net.NetClient;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/3/28.
@@ -21,6 +29,7 @@ public class LoginPresenter {
      * Activity实现视图接口
      */
     private LoginView mLoginView;
+    private Call mCall;
 
     public LoginPresenter(LoginView loginView) {
         this.mLoginView = loginView;
@@ -28,41 +37,54 @@ public class LoginPresenter {
 
     // 登录的业务
     public void Login() {
-        /**
-         * 1. 参数：请求的地址、上传的数据等类型，可以为空Void
-         * 2. 进度：一般是Integer(int的包装类)，可以为空Void
-         * 3. 结果：比如String、可以为空Void
-         */
-        new AsyncTask<Void, Integer, Void>() {
-            // 请求之前的视图处理：比如进度条的显示
+
+        //Call模型的取消
+        //mCall.cancel();
+
+        mCall = NetClient.getInstance().getData();
+
+        mCall.enqueue(new Callback() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mLoginView.showProgress();
+            public void onFailure(Call call, IOException e) {
+                //Log.e("okhttp","onfailure");
             }
 
-            // 后台线程：耗时的操作
             @Override
-            protected Void doInBackground(Void... params) {
-                 // 模拟：休眠3秒钟
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void onResponse(Call call, Response response) throws IOException {
+                //Log.e("okhttp","onresponse"+response.code());
+
+                if (response.isSuccessful()) {
+                   // Log.e("响应成功","响应体数据"+response.body().string());
                 }
-                return null;
             }
+        });
 
-            // 拿到请求的数据，处理UI：进度条隐藏、跳转页面等
+
+
+        //同步方式
+       /* try {
+            Response execute = okHttpClient.newCall(request).execute();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        //异步方式
+       /* okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                mLoginView.hideProgress();
-                mLoginView.showToast("登录成功");
-                mLoginView.navigateToHome();
-
+            public void onFailure(Call call, IOException e) {
+                Log.e("okhttp","onfailure");
             }
-        }.execute();
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e("okhttp","onresponse"+response.code());
+
+                if (response.isSuccessful()) {
+                    Log.e("响应成功","响应体数据"+response.body().string());
+                }
+            }
+        });*/
     }
 
 }
