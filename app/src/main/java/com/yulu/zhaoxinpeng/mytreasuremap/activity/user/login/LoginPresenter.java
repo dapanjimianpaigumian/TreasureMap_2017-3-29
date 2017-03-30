@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -54,7 +55,56 @@ public class LoginPresenter {
         //Call模型的取消
         //mCall.cancel();
 
-        NetClient.getInstance().getTreasureApi().getData().enqueue(new retrofit2.Callback<ResponseBody>() {
+        mLoginView.showProgress();
+
+        NetClient.getInstance().getTreasureApi().login(user).enqueue(new retrofit2.Callback<UserResult>() {
+            @Override
+            public void onResponse(retrofit2.Call<UserResult> call, retrofit2.Response<UserResult> response) {
+                mLoginView.hideProgress();
+
+                if (response.isSuccessful()) {
+
+                    if (response.body()==null) {
+                        mLoginView.showToast("未知错误！");
+                        return;
+                    }
+
+                    if (response.body().getCode()==1) {
+                        mLoginView.navigateToHome();
+
+                        mLoginView.showToast(response.body().getMsg());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<UserResult> call, Throwable t) {
+                mLoginView.hideProgress();
+                mLoginView.showToast("请求失败！"+t.getMessage());
+            }
+        });
+
+
+
+
+        /*RequestBody body=RequestBody.create(null,new Gson().toJson(user));
+        NetClient.getInstance().getTreasureApi().login(body).enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                mLoginView.showToast("132");
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                mLoginView.showToast("200");
+            }
+        });*/
+
+
+
+
+       /* NetClient.getInstance().getTreasureApi().getData().enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 mLoginView.showToast("请求成功  "+response.code());
@@ -64,7 +114,7 @@ public class LoginPresenter {
             public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
                 mLoginView.showToast("请求失败！");
             }
-        });
+        });*/
 
 
         //用 Retrofit 实现登录藏宝地图客户端

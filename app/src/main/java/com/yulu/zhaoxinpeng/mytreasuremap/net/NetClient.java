@@ -9,6 +9,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2017/3/29.
@@ -47,6 +48,7 @@ public class NetClient {
                 //将 OkHttpClient 的属性附加给 Retrofit
                 //能这样做的原因可能在于：Retrofit 是对 OkHttpClient 的再封装
                 .client(mOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())//添加格式转换工厂
                 .build();
     }
 

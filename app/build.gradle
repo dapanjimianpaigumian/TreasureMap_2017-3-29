@@ -29,8 +29,19 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+
+    //okhttp 依赖包
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
+
+    //okhttp 日志拦截器依赖包
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+
+    //使用Gson库来解析服务器响应的JSON信息
     compile 'com.google.code.gson:gson:2.8.0'
+
+    //retrofit 依赖包
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
+
+    //转换器
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 }

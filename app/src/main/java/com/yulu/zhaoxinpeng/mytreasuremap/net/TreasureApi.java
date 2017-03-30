@@ -4,9 +4,13 @@ package com.yulu.zhaoxinpeng.mytreasuremap.net;
  * Created by Administrator on 2017/3/30.
  */
 
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserResult;
+
 import java.io.File;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,10 +33,15 @@ import retrofit2.http.QueryMap;
  */
 public interface TreasureApi {
 
-    //构建请求
+    //测试构建请求
     @GET("http://www.baidu.com")
     @Headers({"context-length:1024"})
     Call<ResponseBody> getData();
+
+
+    //Retrofit 登录的构建（Post方式）
+    @POST("/Handler/UserHandler.ashx?action=login")
+    Call<UserResult> login(@Body User user);
 
     /**
      * 注解：
