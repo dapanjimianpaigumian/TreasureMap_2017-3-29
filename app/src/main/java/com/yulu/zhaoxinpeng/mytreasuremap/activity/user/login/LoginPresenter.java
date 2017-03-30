@@ -4,6 +4,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.net.NetClient;
 
 import java.io.IOException;
@@ -17,6 +20,11 @@ import okhttp3.ResponseBody;
  * Created by Administrator on 2017/3/28.
  */
 // 登录的业务类：帮View去做业务请求
+
+/**
+ * 用户名  123456
+ * 密码   123456
+ */
 public class LoginPresenter {
     /**
      * 业务类中间涉及到的视图怎么处理？
@@ -41,12 +49,56 @@ public class LoginPresenter {
     }
 
     // 登录的业务
-    public void Login() {
+    public void Login(User user) {
 
         //Call模型的取消
         //mCall.cancel();
 
-        mCall = NetClient.getInstance().postData();
+        NetClient.getInstance().login(user).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLoginView.showToast("请求失败了！");
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (response.isSuccessful()) {
+
+                            try {
+                                String json = response.body().string();
+
+                                UserResult userResult = new Gson().fromJson(json, UserResult.class);
+
+                                if (userResult==null) {
+                                    mLoginView.showToast("未知错误！");
+                                    return;
+                                }
+
+                                if (userResult.getCode()==1) {
+                                    mLoginView.navigateToHome();
+                                }
+
+                                mLoginView.showToast(userResult.getMsg());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+
+        //OkHttpClient 的Post用法
+        /*mCall = NetClient.getInstance().postData();
 
         mCall.enqueue(new Callback() {
             @Override
@@ -89,7 +141,7 @@ public class LoginPresenter {
                 });
 
             }
-        });
+        });*/
 
 
         //同步方式

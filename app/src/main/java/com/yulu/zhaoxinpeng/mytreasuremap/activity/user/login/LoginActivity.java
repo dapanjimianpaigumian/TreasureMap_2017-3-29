@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.yulu.zhaoxinpeng.mytreasuremap.HomeActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.MainActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.DialogFragmentUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.RegexUtils;
@@ -142,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         }
 
         // 要去做登录的业务逻辑,模拟用户登录的场景，异步任务来模拟
-      new LoginPresenter(this).Login();
+      new LoginPresenter(this).Login(new User(mUsername,mPassword));
 
     }
     //--------------------登录过程中的视图处理-----------------------

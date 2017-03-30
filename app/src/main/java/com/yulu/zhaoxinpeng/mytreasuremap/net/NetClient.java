@@ -1,10 +1,14 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.net;
 
+import com.google.gson.Gson;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
+
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
 
 /**
  * Created by Administrator on 2017/3/29.
@@ -15,9 +19,16 @@ public class NetClient {
 
     private static NetClient mNetClient;
     private OkHttpClient mOkHttpClient;
-    private String BaseUrl="http://admin.syfeicuiedu.com";
+    private String BaseUrl = "http://admin.syfeicuiedu.com";
+    private final Gson mGson;
+    private final Retrofit mRetrofit;
+    private TreasureApi mTreasureApi;
 
+
+    //私有的构造方法
     public NetClient() {
+
+        mGson = new Gson();
 
         //创建一个日志拦截器
         HttpLoggingInterceptor mInterceptor = new HttpLoggingInterceptor();
@@ -26,24 +37,44 @@ public class NetClient {
         mInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         //okHttpClient 的单例化
-        mOkHttpClient = new OkHttpClient.Builder().addInterceptor(mInterceptor).build();
+        mOkHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(mInterceptor)
+                .build();
+
+        // Retrofit的创建
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(BaseUrl)// 必须要加的BASEURL
+                //将 OkHttpClient 的属性附加给 Retrofit
+                //能这样做的原因可能在于：Retrofit 是对 OkHttpClient 的再封装
+                .client(mOkHttpClient)
+                .build();
     }
 
-    public static NetClient getInstance(){
-        if (mNetClient==null) {
+    public static NetClient getInstance() {
+        if (mNetClient == null) {
             mNetClient = new NetClient();
         }
         return mNetClient;
     }
 
+    // 将TreasureApi怎么对外提供处理：提供一个方法getTreasureApi()
+    //通过此方法可以调用 TreasureApi 接口中的接口
+    public TreasureApi getTreasureApi(){
+        if (mTreasureApi==null) {
+            mTreasureApi = mRetrofit.create(TreasureApi.class);
+
+        }
+        return mTreasureApi;
+    }
+
     // 将每一个请求都单独的放置到一个方法里面
-    public Call getData(){
+    public Call getData() {
         // 构建请求
         final Request request = new Request.Builder()
                 .get()// 请求的方式
                 .url("http://www.baidu.com")// 请求的地址
-                .addHeader("content-type","html")// 添加请求头信息
-                .addHeader("context-length","1024")
+                .addHeader("content-type", "html")// 添加请求头信息
+                .addHeader("context-length", "1024")
                 // Get请求不需要添加请求体
                 .build();
         // 根据请求进行建模Call
@@ -51,9 +82,10 @@ public class NetClient {
     }
 
     //Post 形式的请求构建
-    public Call postData(){
+    public Call postData() {
 
         /**
+         * OkHttpClient 的 Post请求方式
          * 1. 当需要上传的数据是键值对的形式的时候
          *  username = “”；
          *  password = “”；
@@ -76,13 +108,26 @@ public class NetClient {
 //                .build();
 
         // 需要上传的请求体:字符串、文件、数组等
-        RequestBody requestbody=RequestBody.create(null,"{\n" +
+        RequestBody requestbody = RequestBody.create(null, "{\n" +
                 "\"UserName\":\"qjd\",\n" +
                 "\"Password\":\"654321\"\n" +
                 "}\n");
-        Request request=new Request.Builder()
+        Request request = new Request.Builder()
                 .post(requestbody)
-                .url(BaseUrl+"/Handler/UserHandler.ashx?action=login")
+                .url(BaseUrl + "/Handler/UserHandler.ashx?action=login")
+                .build();
+
+        return mOkHttpClient.newCall(request);
+    }
+
+    //Retrofit的调用
+    public Call login(User user){
+
+        RequestBody requestBody=RequestBody.create(null,mGson.toJson(user));
+
+        Request request = new Request.Builder()
+                .post(requestBody)
+                .url(BaseUrl + "/Handler/UserHandler.ashx?action=login")
                 .build();
 
         return mOkHttpClient.newCall(request);
