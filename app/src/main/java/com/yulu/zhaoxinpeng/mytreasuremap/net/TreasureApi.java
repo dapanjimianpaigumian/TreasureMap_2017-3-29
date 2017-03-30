@@ -15,6 +15,6 @@ import retrofit2.http.Headers;
 public interface TreasureApi {
 
     @GET("http://www.baidu.com")
-    @Headers({"content-type:html"})
+    @Headers({"context-length:1024"})
     Call<ResponseBody> getData();
 }

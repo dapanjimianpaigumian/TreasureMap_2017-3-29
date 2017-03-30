@@ -120,7 +120,7 @@ public class NetClient {
         return mOkHttpClient.newCall(request);
     }
 
-    //Retrofit的调用
+    //Retrofit的调用，实现登录
     public Call login(User user){
 
         RequestBody requestBody=RequestBody.create(null,mGson.toJson(user));

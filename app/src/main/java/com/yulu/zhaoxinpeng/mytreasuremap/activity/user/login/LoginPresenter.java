@@ -54,7 +54,21 @@ public class LoginPresenter {
         //Call模型的取消
         //mCall.cancel();
 
-        NetClient.getInstance().login(user).enqueue(new Callback() {
+        NetClient.getInstance().getTreasureApi().getData().enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                mLoginView.showToast("请求成功  "+response.code());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                mLoginView.showToast("请求失败！");
+            }
+        });
+
+
+        //用 Retrofit 实现登录藏宝地图客户端
+       /* NetClient.getInstance().login(user).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 mHandler.post(new Runnable() {
@@ -94,7 +108,7 @@ public class LoginPresenter {
                     }
                 });
             }
-        });
+        });*/
 
 
         //OkHttpClient 的Post用法
