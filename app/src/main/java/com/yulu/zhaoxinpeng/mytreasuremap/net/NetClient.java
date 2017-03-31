@@ -20,7 +20,7 @@ public class NetClient {
 
     private static NetClient mNetClient;
     private OkHttpClient mOkHttpClient;
-    private String BaseUrl = "http://admin.syfeicuiedu.com";
+    public static String BaseUrl = "http://admin.syfeicuiedu.com";
     private final Gson mGson;
     private final Retrofit mRetrofit;
     private TreasureApi mTreasureApi;

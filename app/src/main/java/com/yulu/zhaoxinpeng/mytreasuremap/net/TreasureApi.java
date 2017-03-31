@@ -7,6 +7,7 @@ package com.yulu.zhaoxinpeng.mytreasuremap.net;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginResult;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.register.RegisterResult;
 
 import java.io.File;
 import java.util.Map;
@@ -42,6 +43,10 @@ public interface TreasureApi {
     //Retrofit 登录的构建（Post方式）
     @POST("/Handler/UserHandler.ashx?action=login")
     Call<LoginResult> login(@Body User user);
+
+    // 注册的请求
+    @POST("/Handler/UserHandler.ashx?action=register")
+    Call<RegisterResult> register(@Body User user);
 
     // 表单：
     @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=register")

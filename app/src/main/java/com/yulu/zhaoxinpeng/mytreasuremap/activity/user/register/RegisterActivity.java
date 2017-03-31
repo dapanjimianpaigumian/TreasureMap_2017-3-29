@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.yulu.zhaoxinpeng.mytreasuremap.HomeActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.MainActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.DialogFragmentUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.RegexUtils;
@@ -143,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         }
 
         // 进行注册的业务
-        new RegisterPresenter(this).Register();
+        new RegisterPresenter(this).register(new User(mUsername,mPassword));
 
     }
 
