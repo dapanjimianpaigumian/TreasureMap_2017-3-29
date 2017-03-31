@@ -44,20 +44,11 @@ public interface TreasureApi {
     @POST("/Handler/UserHandler.ashx?action=login")
     Call<LoginResult> login(@Body User user);
 
-    // 注册的请求
+    // Retrofit 注册的请求
     @POST("/Handler/UserHandler.ashx?action=register")
     Call<RegisterResult> register(@Body User user);
 
-    // 表单：
-    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=register")
-    @FormUrlEncoded
-    Call<ResponseBody> getFormData(@Field("username")String name,
-                                   @Field("password")String password);
 
-    // 多部分：
-    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=update")
-    @Multipart
-    Call<ResponseBody> getMultData(@Part("user")MultiUser user);
     /**
      * 注解：
      * 1. 请求的方式：@GET、@POST、@PUT等
@@ -75,6 +66,18 @@ public interface TreasureApi {
      *                   @Part("name")String name
      *                   @PartMap Map<String,String> map
      */
+
+    // 表单形式的请求：
+    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=register")
+    @FormUrlEncoded
+    Call<ResponseBody> getFormData(@Field("username")String name,
+                                   @Field("password")String password);
+
+    // 多部分形式的请求：
+    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=update")
+    @Multipart
+    Call<ResponseBody> getMultData(@Part("user")MultiUser user);
+
 
     @POST("group/{id}/users?sort=desc")
     @Headers({"x-type:123","x-length:1024"})

@@ -17,6 +17,7 @@ public class UserPrefs {
 
     private static UserPrefs userPrefs;
 
+    //启动 App 时首先初始化的东西
     public static void init(Context context) {
         userPrefs = new UserPrefs(context);
     }
