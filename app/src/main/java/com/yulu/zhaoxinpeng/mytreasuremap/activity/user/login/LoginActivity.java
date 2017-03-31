@@ -2,7 +2,6 @@ package com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.yulu.zhaoxinpeng.mytreasuremap.HomeActivity;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.HomeActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.MainActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
@@ -28,9 +27,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static android.R.id.message;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 

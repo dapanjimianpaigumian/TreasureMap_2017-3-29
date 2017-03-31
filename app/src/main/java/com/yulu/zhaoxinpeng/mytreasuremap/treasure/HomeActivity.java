@@ -1,4 +1,4 @@
-package com.yulu.zhaoxinpeng.mytreasuremap;
+package com.yulu.zhaoxinpeng.mytreasuremap.treasure;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserPrefs;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 

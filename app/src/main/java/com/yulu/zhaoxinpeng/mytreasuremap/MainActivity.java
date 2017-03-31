@@ -15,13 +15,12 @@ import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserPrefs;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.register.RegisterActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.HomeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static android.R.attr.filter;
 
 public class MainActivity extends AppCompatActivity {
 

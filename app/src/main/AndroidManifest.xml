@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".activity.user.register.RegisterActivity" />
         <activity android:name=".activity.user.login.LoginActivity"></activity>
-        <activity android:name=".HomeActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+        <activity android:name=".treasure.HomeActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
