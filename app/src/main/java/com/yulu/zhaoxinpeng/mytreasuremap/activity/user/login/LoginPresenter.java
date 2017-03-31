@@ -2,20 +2,15 @@ package com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
-import com.google.gson.Gson;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
-import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.net.NetClient;
 
-import java.io.IOException;
-
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/3/28.
@@ -55,11 +50,14 @@ public class LoginPresenter {
         //Call模型的取消
         //mCall.cancel();
 
+
+
+
         mLoginView.showProgress();
 
-        NetClient.getInstance().getTreasureApi().login(user).enqueue(new retrofit2.Callback<UserResult>() {
+        NetClient.getInstance().getTreasureApi().login(user).enqueue(new Callback<LoginResult>() {
             @Override
-            public void onResponse(retrofit2.Call<UserResult> call, retrofit2.Response<UserResult> response) {
+            public void onResponse(retrofit2.Call<LoginResult> call, Response<LoginResult> response) {
                 mLoginView.hideProgress();
 
                 if (response.isSuccessful()) {
@@ -79,12 +77,42 @@ public class LoginPresenter {
             }
 
             @Override
-            public void onFailure(retrofit2.Call<UserResult> call, Throwable t) {
+            public void onFailure(retrofit2.Call<LoginResult> call, Throwable t) {
                 mLoginView.hideProgress();
                 mLoginView.showToast("请求失败！"+t.getMessage());
             }
         });
 
+        /*//表单形式的方法
+        NetClient.getInstance().getTreasureApi().getFormData("123456", "123456").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                mLoginView.showToast("请求成功  " + response.code());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                mLoginView.showToast("请求失败！" + t.getMessage());
+            }
+        });*/
+
+        //多部分形式的方法
+        /*MultiUser user1 = new MultiUser("yt59856b15cf394e7b84a7d48447d16098",
+                "xc62",
+                "555",
+                "123456",
+                "0F8EC12223174657B2E842076D54C361");
+        NetClient.getInstance().getTreasureApi().getMultData(user1).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                mLoginView.showToast("请求成功  "+response.code());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+                mLoginView.showToast("请求失败！");
+            }
+        });*/
 
 
 

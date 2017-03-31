@@ -1,13 +1,12 @@
-package com.yulu.zhaoxinpeng.mytreasuremap.activity.user;
+package com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Administrator on 2017/3/30.
+ * Created by Administrator on 2017/3/31.
  */
 // 用户登录的响应实体类
-public class UserResult {
-
+public class LoginResult {
 
     /**
      * errcode : 1

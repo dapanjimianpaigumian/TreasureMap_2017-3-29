@@ -4,13 +4,13 @@ package com.yulu.zhaoxinpeng.mytreasuremap.net;
  * Created by Administrator on 2017/3/30.
  */
 
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
-import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserResult;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginResult;
 
 import java.io.File;
 import java.util.Map;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -41,8 +41,18 @@ public interface TreasureApi {
 
     //Retrofit 登录的构建（Post方式）
     @POST("/Handler/UserHandler.ashx?action=login")
-    Call<UserResult> login(@Body User user);
+    Call<LoginResult> login(@Body User user);
 
+    // 表单：
+    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=register")
+    @FormUrlEncoded
+    Call<ResponseBody> getFormData(@Field("username")String name,
+                                   @Field("password")String password);
+
+    // 多部分：
+    @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=update")
+    @Multipart
+    Call<ResponseBody> getMultData(@Part("user")MultiUser user);
     /**
      * 注解：
      * 1. 请求的方式：@GET、@POST、@PUT等
