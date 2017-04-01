@@ -11,6 +11,22 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    // 声明我们使用的是本项目下面的debug.keystore
+    signingConfigs {
+        // your debug keystore
+        debug{
+            storeFile file("debug.keystore")
+        }
+    }
+
+    // 指明so文件的路径在libs下面
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -47,4 +63,11 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     //cardview 卡片布局需要添加的依赖
     compile 'com.android.support:cardview-v7:25.3.0'
+    compile files('libs/baidumapapi_base_v4_2_1.jar')
+    compile files('libs/baidumapapi_cloud_v4_2_1.jar')
+    compile files('libs/baidumapapi_map_v4_2_1.jar')
+    compile files('libs/baidumapapi_radar_v4_2_1.jar')
+    compile files('libs/baidumapapi_search_v4_2_1.jar')
+    compile files('libs/baidumapapi_util_v4_2_1.jar')
+    compile files('libs/locSDK_6.13.jar')
 }
