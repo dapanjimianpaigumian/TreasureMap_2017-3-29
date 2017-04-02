@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:text="@string/register"
             android:textSize="16sp"
-            android:theme="@style/AppTheme.Button.Transparent"
+            style="@style/AppTheme.Button.Transparent"
             />
 
         <Space
