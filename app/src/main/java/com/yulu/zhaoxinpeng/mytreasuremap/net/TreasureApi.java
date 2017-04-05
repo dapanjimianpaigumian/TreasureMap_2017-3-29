@@ -8,8 +8,11 @@ import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.register.RegisterResult;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -48,6 +51,9 @@ public interface TreasureApi {
     @POST("/Handler/UserHandler.ashx?action=register")
     Call<RegisterResult> register(@Body User user);
 
+    //获取区域内的宝藏数据
+    @POST("/Handler/TreasureHandler.ashx?action=show")
+    Call<List<Treasure>> getTreasureInArea(@Body Area area);
 
     /**
      * 注解：

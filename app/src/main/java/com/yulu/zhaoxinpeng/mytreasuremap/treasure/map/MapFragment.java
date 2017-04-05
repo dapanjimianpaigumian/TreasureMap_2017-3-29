@@ -36,6 +36,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,6 +90,7 @@ public class MapFragment extends Fragment {
     private String mCurrentAddr;
     private MapStatusUpdate mStatusUpdate;
     private Boolean isFirst=true;
+    private MapPresenter mMapPresenter;
 
     @Nullable
     @Override
@@ -108,6 +110,8 @@ public class MapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
+
+        mMapPresenter = new MapPresenter();
 
         // 初始化百度地图
         initMapView();
@@ -204,6 +208,45 @@ public class MapFragment extends Fragment {
 
         // 拿到地图的操作类(设置地图的视图、地图状态变化、添加覆盖物等)
         mBaidumap = mMapView.getMap();
+
+
+        mBaidumap.setOnMapStatusChangeListener(mStatusChangeListener);
+    }
+
+    private BaiduMap.OnMapStatusChangeListener mStatusChangeListener=new BaiduMap.OnMapStatusChangeListener() {
+        @Override
+        public void onMapStatusChangeStart(MapStatus mapStatus) {
+
+        }
+
+        @Override
+        public void onMapStatusChange(MapStatus mapStatus) {
+
+        }
+
+        @Override
+        public void onMapStatusChangeFinish(MapStatus mapStatus) {
+            LatLng target = mapStatus.target;
+            if (target!=MapFragment.this.mCurrentLocation) {
+                updateMapArea();
+                // 当前地图的位置
+                MapFragment.this.mCurrentLocation=target;
+            }
+        }
+    };
+
+    private void updateMapArea() {
+        MapStatus mapStatus = mBaidumap.getMapStatus();
+        double longitude = mapStatus.target.longitude;
+        double latitude = mapStatus.target.latitude;
+        Area area = new Area();
+
+        area.setMaxLat(Math.ceil(latitude));
+        area.setMaxLng(Math.ceil(longitude));
+        area.setMinLat(Math.floor(latitude));
+        area.setMinLat(Math.floor(latitude));
+
+        mMapPresenter.getTreasure(area);
     }
 
     @Override
