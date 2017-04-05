@@ -56,4 +56,12 @@ public class Area {
     public int hashCode() {
         return (int)maxLat;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Area))return false;
+        if(o == this)return true;
+        Area other = (Area)o;
+        return (int)maxLat == (int)other.maxLat && (int)maxLng == (int)other.maxLng;
+    }
 }

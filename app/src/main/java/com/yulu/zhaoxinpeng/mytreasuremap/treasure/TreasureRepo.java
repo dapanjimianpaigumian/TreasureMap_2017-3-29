@@ -5,6 +5,9 @@ package com.yulu.zhaoxinpeng.mytreasuremap.treasure;
  * 宝藏仓库,用来缓存宝藏及区域数据
  */
 
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,6 +54,8 @@ public class TreasureRepo {
     }
 
     public Treasure getTreasure(int id) {
+
+
         return treasureMap.get(id);
     }
 
