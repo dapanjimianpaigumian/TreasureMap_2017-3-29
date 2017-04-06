@@ -1,8 +1,10 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +22,14 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviParaOption;
+import com.baidu.mapapi.utils.OpenClientUtil;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.map.MapFragment;
 
 import java.util.List;
 
@@ -170,10 +176,99 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
         @Override
         public boolean onMenuItemClick(MenuItem item) {
 
+            // 不管进行骑行还是步行，都需要起点和终点：坐标和地址
+            // 起点：我们定位的位置和地址
+            LatLng start = MapFragment.getMyLocation();
+            String startAddr = MapFragment.getMyAddr();
 
+            // 终点：宝藏的位置和地址
+            LatLng end = new LatLng(mTreasure.getLatitude(), mTreasure.getLongitude());
+            String endAddr = mTreasure.getLocation();
+
+            switch (item.getItemId()){
+                case R.id.walking_navi:
+                    //开始步行导航
+                    startWalkingNavi(start,startAddr,end,endAddr);
+                    break;
+                case R.id.biking_navi:
+                    //开始骑行导航
+                    startBikingNavi(start,startAddr,end,endAddr);
+            }
             return false;
         }
     };
+
+    //骑行导航方法
+    private void startBikingNavi(LatLng start, String startAddr, LatLng end, String endAddr) {
+
+        //起点、终点的设置
+        NaviParaOption option = new NaviParaOption()
+                .startPoint(start)
+                .startName(startAddr)
+                .endPoint(end)
+                .endName(endAddr);
+
+        //打开骑行导航
+        boolean bikeNavi = BaiduMapNavigation.openBaiduMapWalkNavi(option, this);
+
+        //无法成功开启百度地图，那么开启网页导航
+        if (bikeNavi) {
+            //startWebNavi(start,startAddr,end,endAddr);
+
+            showDialog();
+        }
+    }
+
+    // 显示一个对话框提示：没有安装，是否去下载
+    private void showDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("您未安装百度地图客户端或版本过低，要不要安装？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 打开最新版的客户端下载页面
+                        OpenClientUtil.getLatestBaiduMapApp(TreasureDetailActivity.this);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
+    }
+
+    //步行导航方法
+    private void startWalkingNavi(LatLng start, String startAddr, LatLng end, String endAddr) {
+        //起点、终点的设置
+        NaviParaOption option = new NaviParaOption()
+                .startPoint(start)
+                .startName(startAddr)
+                .endPoint(end)
+                .endName(endAddr);
+
+        //开启步行导航
+        boolean walkNavi = BaiduMapNavigation.openBaiduMapWalkNavi(option, this);
+
+        //无法成功开启百度地图，那么开启网页导航
+        if (walkNavi) {
+            startWebNavi(start,startAddr,end,endAddr);
+        }
+    }
+
+    //打开网页进行导航
+    private void startWebNavi(LatLng start, String startAddr, LatLng end, String endAddr) {
+        //起点和终点的设置
+        NaviParaOption option = new NaviParaOption()
+                .startPoint(start)
+                .startName(startAddr)
+                .endPoint(end)
+                .endName(endAddr);
+
+        BaiduMapNavigation.openBaiduMapWalkNavi(option,this);
+    }
 
     //-----------------------------------详情的视图实现---------------------------------------
     @Override

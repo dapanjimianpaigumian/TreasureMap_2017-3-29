@@ -1,12 +1,12 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.treasure.map;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -107,6 +107,7 @@ public class MapFragment extends Fragment implements MapMvpView {
     private static LatLng mCurrentLocation;
     private static LatLng first_CurrentLocation;
     private String mCurrentAddr;
+    private static String first_CurrentAddr;
     private MapStatusUpdate mStatusUpdate;
     private Boolean isFirst = true;
     private MapPresenter mMapPresenter;
@@ -186,7 +187,9 @@ public class MapFragment extends Fragment implements MapMvpView {
             // 定位的位置和地址
             mCurrentLocation = new LatLng(latitude, longitude);
             first_CurrentLocation=mCurrentLocation;
+
             mCurrentAddr = bdLocation.getAddrStr();
+            first_CurrentAddr=mCurrentAddr;
 
             Log.i("TAG", "定位的位置：" + mCurrentAddr + "经纬度：" + latitude + "," + longitude);
 
@@ -417,9 +420,13 @@ public class MapFragment extends Fragment implements MapMvpView {
     private BitmapDescriptor dot = BitmapDescriptorFactory.fromResource(R.mipmap.treasure_dot);
     private BitmapDescriptor dot_expand = BitmapDescriptorFactory.fromResource(R.mipmap.treasure_expanded);
 
-    // 将定位的位置返回出去，供其它调用
+    // 将定位的经纬度返回出去，供其它调用
     public static LatLng getMyLocation() {
         return first_CurrentLocation;
+    }
+    // 将位置信息返回出去，供其它调用
+    public static String getMyAddr(){
+        return first_CurrentAddr;
     }
 
     // 添加覆盖物的方法
@@ -519,5 +526,14 @@ public class MapFragment extends Fragment implements MapMvpView {
         // 清空缓存的数据
         TreasureRepo.getInstance().clear();
         unbinder.unbind();
+    }
+
+    //对外提供一个方法，什么时候可以退出
+    public boolean clickBackPressed(){
+        if (mUIMode!=UI_MODE_NORMAL) {
+            changeUIMode(UI_MODE_NORMAL);
+            return false;
+        }
+        return true;
     }
 }
