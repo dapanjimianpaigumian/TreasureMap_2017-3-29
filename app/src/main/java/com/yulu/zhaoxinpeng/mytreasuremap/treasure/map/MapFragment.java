@@ -46,6 +46,7 @@ import com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.TreasureRepo;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetailActivity;
 
 import java.util.List;
 
@@ -54,11 +55,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-
 /**
  * Created by Administrator on 2017/3/31.
+ * 地图和宝藏的展示
  */
-// 地图和宝藏的展示
+
 public class MapFragment extends Fragment implements MapMvpView {
 
     private static final int LOCATION_REQUEST_CODE = 200;
@@ -285,7 +286,7 @@ public class MapFragment extends Fragment implements MapMvpView {
                 // InfoWindow的点击监听
                 @Override
                 public void onInfoWindowClick() {
-                    // 切换回普通的视图
+                    // 切换回普通的视图(点图)
                     changeUIMode(UI_MODE_NORMAL);
                 }
             });
@@ -346,7 +347,7 @@ public class MapFragment extends Fragment implements MapMvpView {
             // 切换为选中视图(展示宝藏信息卡片)
             case UI_MODE_SELECT:
                 mLayoutBottom.setVisibility(View.VISIBLE);
-                mTreasureView.setVisibility(View.VISIBLE);
+                //mTreasureView.setVisibility(View.VISIBLE);
                 mCenterLayout.setVisibility(View.GONE);
                 mHideTreasure.setVisibility(View.GONE);
                 break;
@@ -418,7 +419,7 @@ public class MapFragment extends Fragment implements MapMvpView {
 
     // 将定位的位置返回出去，供其它调用
     public static LatLng getMyLocation() {
-        return mCurrentLocation;
+        return first_CurrentLocation;
     }
 
     // 添加覆盖物的方法
@@ -438,7 +439,7 @@ public class MapFragment extends Fragment implements MapMvpView {
     }
 
     //--------------------------------------------------------------------------------------------
-    @OnClick({R.id.iv_scaleUp, R.id.iv_scaleDown, R.id.tv_satellite, R.id.tv_compass,R.id.tv_located})
+    @OnClick({R.id.iv_scaleUp, R.id.iv_scaleDown, R.id.tv_satellite, R.id.tv_compass,R.id.treasureView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scaleUp:
@@ -461,9 +462,11 @@ public class MapFragment extends Fragment implements MapMvpView {
                 boolean enabled = mBaidumap.getUiSettings().isCompassEnabled();
                 mBaidumap.getUiSettings().setCompassEnabled(!enabled);
                 break;
-            case R.id.tv_located:
-
-
+            case R.id.treasureView:
+                int id = mCurrentMarker.getExtraInfo().getInt("id");
+                Treasure treasure = TreasureRepo.getInstance().getTreasure(id);
+                TreasureDetailActivity.open(getActivity(),treasure);
+                break;
         }
     }
 

@@ -2,12 +2,14 @@ package com.yulu.zhaoxinpeng.mytreasuremap.treasure;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/4/5.
  * 获取宝藏时的响应体数据 ResponeBody
  */
-
-public class Treasure {
+//实现序列化的对象（类）可以利用 intent.putExtra() 传递
+public class Treasure implements Serializable{
 
     /**
      * htid : 173

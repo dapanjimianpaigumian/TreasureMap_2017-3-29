@@ -10,6 +10,8 @@ import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.register.RegisterResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetail;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetailResult;
 
 import java.io.File;
 import java.util.List;
@@ -51,10 +53,13 @@ public interface TreasureApi {
     @POST("/Handler/UserHandler.ashx?action=register")
     Call<RegisterResult> register(@Body User user);
 
-    //获取区域内的宝藏数据
+    //获取区域内的宝藏数据的请求
     @POST("/Handler/TreasureHandler.ashx?action=show")
     Call<List<Treasure>> getTreasureInArea(@Body Area area);
 
+    //获取宝藏数据详情的请求
+    @POST("/Handler/TreasureHandler.ashx?action=tdetails")
+    Call<List<TreasureDetailResult>> getTreasureDetail(@Body TreasureDetail treasureDetail);
     /**
      * 注解：
      * 1. 请求的方式：@GET、@POST、@PUT等
@@ -73,7 +78,7 @@ public interface TreasureApi {
      *                   @PartMap Map<String,String> map
      */
 
-    // 表单形式的请求：
+   /* // 表单形式的请求：
     @POST("http://wx.feicuiedu.com:9094/yitao/UserWeb?method=register")
     @FormUrlEncoded
     Call<ResponseBody> getFormData(@Field("username")String name,
@@ -103,5 +108,5 @@ public interface TreasureApi {
     @Multipart
     Call<ResponseBody> getMultUrl(@Part("photo")File file,
                                   @Part("name")String name,
-                                  @PartMap Map<String,String> map);
+                                  @PartMap Map<String,String> map);*/
 }

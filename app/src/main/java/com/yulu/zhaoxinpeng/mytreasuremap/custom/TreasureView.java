@@ -1,9 +1,7 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.custom;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -58,9 +56,8 @@ public class TreasureView extends RelativeLayout {
     }
 
     // 可以对外提供一个方法：根据宝藏信息，填充布局中的数据
-    public void bindTreasure(Treasure treasure){
+    public void bindTreasure(Treasure treasure) {
 
-        Log.e("treasure",treasure+"");
         // 标题和地址
         mTvTreasureTitle.setText(treasure.getTitle());
         mTvTreasureLocation.setText(treasure.getLocation());
@@ -70,21 +67,21 @@ public class TreasureView extends RelativeLayout {
         double distance = 0.00d;// 距离
 
         // 宝藏的位置
-        LatLng latLng = new LatLng(treasure.getLatitude(),treasure.getLongitude());
+        LatLng latLng = new LatLng(treasure.getLatitude(), treasure.getLongitude());
 
         // 定位的位置
         LatLng myLocation = MapFragment.getMyLocation();
 
-        if (myLocation==null){
+        if (myLocation == null) {
             distance = 0.00d;
         }
 
         // 利用百度地图提供的计算工具
-        distance = DistanceUtil.getDistance(latLng,myLocation);
+        distance = DistanceUtil.getDistance(latLng, myLocation);
 
         // 规范下一显示的样式
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        String text = decimalFormat.format(distance/1000)+"km";
+        String text = decimalFormat.format(distance / 1000) + "km";
         mTvDistance.setText(text);
     }
 
