@@ -12,6 +12,8 @@ import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetail;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetailResult;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.hide.HideTreasure;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.hide.HideTreasureResult;
 
 import java.io.File;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -60,6 +63,10 @@ public interface TreasureApi {
     //获取宝藏数据详情的请求
     @POST("/Handler/TreasureHandler.ashx?action=tdetails")
     Call<List<TreasureDetailResult>> getTreasureDetail(@Body TreasureDetail treasureDetail);
+
+    //埋藏宝藏的请求
+    @POST("/Handler/TreasureHandler.ashx?action=hide")
+    Call<HideTreasureResult> hideTreasure(@Body HideTreasure hideTreasure);
     /**
      * 注解：
      * 1. 请求的方式：@GET、@POST、@PUT等

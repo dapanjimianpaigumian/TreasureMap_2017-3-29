@@ -3,13 +3,11 @@ package com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserPrefs;
 import com.yulu.zhaoxinpeng.mytreasuremap.net.NetClient;
 
 import okhttp3.Call;
-import okhttp3.ResponseBody;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -50,9 +48,6 @@ public class LoginPresenter {
 
         //Call模型的取消
         //mCall.cancel();
-
-
-
 
         mLoginView.showProgress();
 

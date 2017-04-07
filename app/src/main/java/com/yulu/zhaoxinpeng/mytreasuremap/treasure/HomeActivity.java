@@ -47,6 +47,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TreasureListFragment mListFragment;// 列表视图
     private FragmentManager mFragmentManager;
     private MapFragment mMapFragment;
+    private MenuItem mItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,12 +125,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         // item的图标的变化处理
-        MenuItem item = menu.findItem(R.id.action_toggle);
+        mItem = menu.findItem(R.id.action_toggle);
         // 根据显示的视图不一样，设置不一样的图标
         if (mListFragment != null && mListFragment.isAdded()) {
-            item.setIcon(R.drawable.ic_map);
-        } else {
-            item.setIcon(R.drawable.ic_view_list);
+            mItem.setIcon(R.drawable.ic_map);
+        } else if (mListFragment == null ){
+            mItem.setIcon(R.drawable.ic_view_list);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -165,6 +166,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //当展示 列表视图时，
         if (mListFragment != null && mListFragment.isAdded()) {
 
+            mActivityUtils.showToast(mListFragment + "map视图");
             // 将ListFragment弹出回退栈
             mFragmentManager.popBackStack();
             // 移除ListFragment
@@ -172,12 +174,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        mListFragment = new TreasureListFragment();
+        if (mListFragment==null) {
+            mListFragment = new TreasureListFragment();
+        }
 
-        mActivityUtils.showToast(mListFragment + "---------------------");
+        mActivityUtils.showToast(mListFragment + "list视图");
         // 在布局中展示(FrameLayout作为占位)
         mFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, mListFragment)
+                .replace(R.id.fragment_container,mListFragment)
                 // 添加回退栈
                 .addToBackStack(null)
                 .commit();

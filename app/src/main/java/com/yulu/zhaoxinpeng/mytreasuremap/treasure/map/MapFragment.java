@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,12 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView;
@@ -47,6 +54,7 @@ import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Treasure;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.TreasureRepo;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.detail.TreasureDetailActivity;
+import com.yulu.zhaoxinpeng.mytreasuremap.treasure.hide.HideTreasureAcitvity;
 
 import java.util.List;
 
@@ -88,7 +96,7 @@ public class MapFragment extends Fragment implements MapMvpView {
     @BindView(R.id.iv_toTreasureInfo)
     ImageView ivToTreasureInfo;
     @BindView(R.id.et_treasureTitle)
-    EditText etTreasureTitle;
+    EditText mEtTreasureTitle;
     @BindView(R.id.cardView)
     CardView cardView;
     @BindView(R.id.layout_bottom)
@@ -101,6 +109,7 @@ public class MapFragment extends Fragment implements MapMvpView {
     RelativeLayout mHideTreasure;
 
     Unbinder unbinder;
+    Unbinder unbinder1;
     private MapView mMapView;
     private BaiduMap mBaidumap;
     private LocationClient mLocationClient;
@@ -113,6 +122,8 @@ public class MapFragment extends Fragment implements MapMvpView {
     private MapPresenter mMapPresenter;
     private ActivityUtils mAcitivityUtils;
     private Marker mCurrentMarker;
+    private GeoCoder mGeoCoder;
+    private String mGeoCoderAddr;
 
     @Nullable
     @Override
@@ -124,6 +135,7 @@ public class MapFragment extends Fragment implements MapMvpView {
             //如果没有成功获取，就需要向用户申请
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
         }
+
         return view;
     }
 
@@ -142,7 +154,44 @@ public class MapFragment extends Fragment implements MapMvpView {
 
         // 初始化定位相关
         initLocation();
+
+        //初始化地理编码相关
+        initGeoCoder();
     }
+
+    private void initGeoCoder() {
+
+        //第一步 创建地理编码检索实例
+        mGeoCoder = GeoCoder.newInstance();
+
+        mGeoCoder.setOnGetGeoCodeResultListener(mGeoCoderResultListener);
+    }
+
+    // 地理编码的监听者
+    private OnGetGeoCoderResultListener mGeoCoderResultListener = new OnGetGeoCoderResultListener() {
+        // 获取地理编码结果:geoCodeResult拿到的结果
+        @Override
+        public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+        }
+
+        // 获取反向地理编码结果：reverseGeoCodeResult拿到的结果
+        @Override
+        public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+            // 判断结果是否正确拿到
+            if ((reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR)) {
+                mGeoCoderAddr = "已进入未知领域";
+                tvCurrentLocation.setText(mGeoCoderAddr);
+                return;
+
+            }
+            // 拿到地址信息
+            mGeoCoderAddr = reverseGeoCodeResult.getAddress();
+
+            // 将地址信息设置给TextView
+            tvCurrentLocation.setText(mGeoCoderAddr);
+        }
+    };
 
     // 初始化定位相关
     private void initLocation() {
@@ -186,10 +235,10 @@ public class MapFragment extends Fragment implements MapMvpView {
 
             // 定位的位置和地址
             mCurrentLocation = new LatLng(latitude, longitude);
-            first_CurrentLocation=mCurrentLocation;
+            first_CurrentLocation = mCurrentLocation;
 
             mCurrentAddr = bdLocation.getAddrStr();
-            first_CurrentAddr=mCurrentAddr;
+            first_CurrentAddr = mCurrentAddr;
 
             Log.i("TAG", "定位的位置：" + mCurrentAddr + "经纬度：" + latitude + "," + longitude);
 
@@ -268,6 +317,17 @@ public class MapFragment extends Fragment implements MapMvpView {
             if (target != MapFragment.this.mCurrentLocation) {
                 // 根据当前的地图的状态来获取当前的区域内的宝藏数据
                 updateMapArea();
+
+                // 在埋藏宝藏的情况下
+                if (mUIMode == UI_MODE_HIDE) {
+
+                    // 设置反地理编码的参数：位置(当前的经纬度)
+                    ReverseGeoCodeOption option = new ReverseGeoCodeOption();
+                    option.location(target);
+
+                    // 发起反地理编码：经纬度-->地址
+                    mGeoCoder.reverseGeoCode(option);
+                }
                 // 当前地图的位置
                 MapFragment.this.mCurrentLocation = target;
             }
@@ -295,8 +355,8 @@ public class MapFragment extends Fragment implements MapMvpView {
             });
 
             // 当前点击的Marker先管理判断
-            if (mCurrentMarker!=null){
-                if (mCurrentMarker!=marker){
+            if (mCurrentMarker != null) {
+                if (mCurrentMarker != marker) {
                     mCurrentMarker.setVisible(true);// 点击了其他的，把之前的显示出来
                 }
             }
@@ -424,8 +484,9 @@ public class MapFragment extends Fragment implements MapMvpView {
     public static LatLng getMyLocation() {
         return first_CurrentLocation;
     }
+
     // 将位置信息返回出去，供其它调用
-    public static String getMyAddr(){
+    public static String getMyAddr() {
         return first_CurrentAddr;
     }
 
@@ -446,7 +507,7 @@ public class MapFragment extends Fragment implements MapMvpView {
     }
 
     //--------------------------------------------------------------------------------------------
-    @OnClick({R.id.iv_scaleUp, R.id.iv_scaleDown, R.id.tv_satellite, R.id.tv_compass,R.id.treasureView})
+    @OnClick({R.id.iv_scaleUp, R.id.iv_scaleDown, R.id.tv_satellite, R.id.tv_compass, R.id.treasureView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_scaleUp:
@@ -472,7 +533,7 @@ public class MapFragment extends Fragment implements MapMvpView {
             case R.id.treasureView:
                 int id = mCurrentMarker.getExtraInfo().getInt("id");
                 Treasure treasure = TreasureRepo.getInstance().getTreasure(id);
-                TreasureDetailActivity.open(getActivity(),treasure);
+                TreasureDetailActivity.open(getActivity(), treasure);
                 break;
         }
     }
@@ -529,11 +590,27 @@ public class MapFragment extends Fragment implements MapMvpView {
     }
 
     //对外提供一个方法，什么时候可以退出
-    public boolean clickBackPressed(){
-        if (mUIMode!=UI_MODE_NORMAL) {
+    public boolean clickBackPressed() {
+        if (mUIMode != UI_MODE_NORMAL) {
             changeUIMode(UI_MODE_NORMAL);
             return false;
         }
         return true;
+    }
+
+    //进入隐藏宝藏详情页
+    @OnClick(R.id.hide_treasure)
+    public void onViewClicked() {
+        // 拿到录入的标题
+        String title = mEtTreasureTitle.getText().toString();
+
+        if (TextUtils.isEmpty(title)) {
+            mAcitivityUtils.showToast("请输入宝藏名称");
+            return;
+        }
+
+        // 输入了标题：跳转到埋藏宝藏详细页面
+        LatLng latLng = mBaidumap.getMapStatus().target;
+        HideTreasureAcitvity.open(getContext(),title,mGeoCoderAddr,latLng,0);
     }
 }
