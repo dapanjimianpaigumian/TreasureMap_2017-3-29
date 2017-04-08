@@ -4,12 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.baidu.mapapi.model.LatLng;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
@@ -22,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class HideTreasureAcitvity extends AppCompatActivity implements HideTreasureView{
+public class HideTreasureAcitvity extends AppCompatActivity implements HideTreasureView {
 
     @BindView(R.id.hide_send)
     ImageView mHideSend;
@@ -30,6 +33,8 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
     Toolbar mToolbar;
     @BindView(R.id.et_description)
     EditText mEtDescription;
+    @BindView(R.id.treasure_size_linearlayout)
+    LinearLayout mTreasureSizeLinearlayout;
     private Unbinder unbinder;
     private static final String KEY_TITLE = "key_title";
     private static final String KEY_ADDRESS = "key_address";
@@ -37,6 +42,7 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
     private static final String KEY_ALTITUDE = "key_altitude";
     private ActivityUtils mActivityUtils;
     private ProgressDialog mProgressDialog;
+    private int Size;
 
     public static void open(Context context, String title, String address, LatLng latLng, double altitude) {
         Intent intent = new Intent(context, HideTreasureAcitvity.class);
@@ -49,8 +55,6 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hide_treasure);
         unbinder = ButterKnife.bind(this);
@@ -62,6 +66,38 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(getIntent().getStringExtra(KEY_TITLE));
         }
+
+        registerForContextMenu(mTreasureSizeLinearlayout);
+    }
+
+    //创建 ContextMenu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_hide_treasure_size, menu);
+    }
+
+    //ContextMenu 监听事件
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_size_mini:
+                mActivityUtils.showToast("小型宝物");
+                Size = 0;
+                break;
+            case R.id.action_size_medium:
+                mActivityUtils.showToast("中等宝物");
+                Size = 1;
+                break;
+            case R.id.action_size_large:
+                mActivityUtils.showToast("大型宝物");
+                Size = 2;
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     //处理返回箭头
@@ -100,6 +136,7 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
         hideTreasure.setLongitude(latlng.longitude);
         hideTreasure.setLocation(address);
         hideTreasure.setTokenId(tokenid);
+        hideTreasure.setSize(Size);
 
         new HideTreasurePresenter(this).hideTreasure(hideTreasure);
     }
@@ -124,7 +161,7 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
 
     @Override
     public void hideProgress() {
-        if (mProgressDialog!=null) {
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
     }

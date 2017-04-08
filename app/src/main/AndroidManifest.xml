@@ -48,17 +48,32 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.user.register.RegisterActivity" />
-        <activity android:name=".activity.user.login.LoginActivity" />
-        <activity android:name=".treasure.HomeActivity" />
-        <activity android:name=".treasure.detail.TreasureDetailActivity" />
+        <activity
+            android:name=".activity.user.register.RegisterActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.login.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".treasure.HomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".treasure.detail.TreasureDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -67,7 +82,16 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".treasure.hide.HideTreasureAcitvity"></activity>
+        <activity
+            android:name=".treasure.hide.HideTreasureAcitvity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.account.AccountActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

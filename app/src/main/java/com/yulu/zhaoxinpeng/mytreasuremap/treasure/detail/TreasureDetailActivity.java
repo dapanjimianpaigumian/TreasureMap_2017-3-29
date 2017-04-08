@@ -39,7 +39,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 // 宝藏的详情页
-public class TreasureDetailActivity extends AppCompatActivity implements TreasureDetailView{
+public class TreasureDetailActivity extends AppCompatActivity implements TreasureDetailView {
 
     private static final String KEY_TREASURE = "key_treasure";
     @BindView(R.id.iv_navigation)
@@ -52,6 +52,8 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
     TreasureView mTreasureView;
     @BindView(R.id.tv_detail_description)
     TextView mTvDetail;
+    @BindView(R.id.tv_detail_size)
+    TextView mTvDetailSize;
     private Unbinder unbinder;
     private Treasure mTreasure;
     private ActivityUtils mActivityUtils;
@@ -121,7 +123,7 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
                 .rotateGesturesEnabled(false);
 
         // 创建的地图控件
-        MapView mMapView=new MapView(this,mBaiduMapOptions);
+        MapView mMapView = new MapView(this, mBaiduMapOptions);
 
         //添加到布局中
         mFrameLayout.addView(mMapView);
@@ -185,14 +187,14 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
             LatLng end = new LatLng(mTreasure.getLatitude(), mTreasure.getLongitude());
             String endAddr = mTreasure.getLocation();
 
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.walking_navi:
                     //开始步行导航
-                    startWalkingNavi(start,startAddr,end,endAddr);
+                    startWalkingNavi(start, startAddr, end, endAddr);
                     break;
                 case R.id.biking_navi:
                     //开始骑行导航
-                    startBikingNavi(start,startAddr,end,endAddr);
+                    startBikingNavi(start, startAddr, end, endAddr);
             }
             return false;
         }
@@ -254,7 +256,7 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
 
         //无法成功开启百度地图，那么开启网页导航
         if (walkNavi) {
-            startWebNavi(start,startAddr,end,endAddr);
+            startWebNavi(start, startAddr, end, endAddr);
         }
     }
 
@@ -267,7 +269,7 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
                 .endPoint(end)
                 .endName(endAddr);
 
-        BaiduMapNavigation.openBaiduMapWalkNavi(option,this);
+        BaiduMapNavigation.openBaiduMapWalkNavi(option, this);
     }
 
     //-----------------------------------详情的视图实现---------------------------------------
@@ -280,9 +282,17 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
     public void setDetailData(List<TreasureDetailResult> list) {
 
         //展示请求到的数据
-        if (list.size()>=1) {
-            TreasureDetailResult result=list.get(0);
+        if (list.size() >= 1) {
+            TreasureDetailResult result = list.get(0);
             mTvDetail.setText(result.description);
+
+            if (result.size==0) {
+                mTvDetailSize.setText("小型");
+            }else if(result.size==1){
+                mTvDetailSize.setText("中等");
+            }else if(result.size==2){
+                mTvDetailSize.setText("大型");
+            }
             return;
         }
         mTvDetail.setText("当前宝藏没有详细信息");

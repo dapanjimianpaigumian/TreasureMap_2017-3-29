@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import com.yulu.zhaoxinpeng.mytreasuremap.MainActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.UserPrefs;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.account.AccountActivity;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.list.TreasureListFragment;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.map.MapFragment;
@@ -26,6 +27,8 @@ import com.yulu.zhaoxinpeng.mytreasuremap.treasure.map.MapFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+
 
 
 /**
@@ -84,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivityUtils.showToast("此乃圆形头像");
+                mActivityUtils.startActivity(AccountActivity.class);
             }
         });
 
@@ -129,7 +132,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // 根据显示的视图不一样，设置不一样的图标
         if (mListFragment != null && mListFragment.isAdded()) {
             mItem.setIcon(R.drawable.ic_map);
-        } else if (mListFragment == null ){
+        } else if (mListFragment == null) {
             mItem.setIcon(R.drawable.ic_view_list);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -174,14 +177,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        if (mListFragment==null) {
+        if (mListFragment == null) {
             mListFragment = new TreasureListFragment();
         }
 
         mActivityUtils.showToast(mListFragment + "list视图");
         // 在布局中展示(FrameLayout作为占位)
         mFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,mListFragment)
+                .replace(R.id.fragment_container, mListFragment)
                 // 添加回退栈
                 .addToBackStack(null)
                 .commit();

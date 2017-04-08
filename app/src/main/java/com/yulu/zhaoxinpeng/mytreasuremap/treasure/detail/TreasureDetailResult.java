@@ -17,15 +17,21 @@ public class TreasureDetailResult {
     @SerializedName("htpoi")
     public final String location;
 
-    /**纬度*/
+    /**
+     * 纬度
+     */
     @SerializedName("htyline")
     public final double latitude;
 
-    /**经度*/
+    /**
+     * 经度
+     */
     @SerializedName("htxline")
     public final double longitude;
 
-    /**海拔*/
+    /**
+     * 海拔
+     */
     @SerializedName("htheight")
     public final double altitude;
 
@@ -60,7 +66,7 @@ public class TreasureDetailResult {
     public final String image9;
 
     @SerializedName("htsize")
-    public final int size;
+    public int size;
 
     @SerializedName("htlevels")
     public final int level;

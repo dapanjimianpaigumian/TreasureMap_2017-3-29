@@ -611,6 +611,6 @@ public class MapFragment extends Fragment implements MapMvpView {
 
         // 输入了标题：跳转到埋藏宝藏详细页面
         LatLng latLng = mBaidumap.getMapStatus().target;
-        HideTreasureAcitvity.open(getContext(),title,mGeoCoderAddr,latLng,0);
+        HideTreasureAcitvity.open(getContext(), title, mGeoCoderAddr, latLng, 0);
     }
 }

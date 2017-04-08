@@ -49,6 +49,13 @@ public class HideTreasure {
     @SerializedName("Height")
     private double altitude;
 
+    @SerializedName("Size")
+    private int size;
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public void setTokenId(int tokenId) {
         this.tokenId = tokenId;
     }
@@ -77,8 +84,6 @@ public class HideTreasure {
         this.altitude = altitude;
     }
 
-    @SerializedName("Size")
-    private final int size = 1;
 
     @SerializedName("Levels")
     private final int level = 1;
@@ -108,5 +113,5 @@ public class HideTreasure {
     private final String imageUrl8 = "";
 
     @SerializedName("Bimage9")
-    private final String imageUrl9  = "";
+    private final String imageUrl9 = "";
 }
