@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,6 +24,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
 import com.baidu.mapapi.navi.NaviParaOption;
 import com.baidu.mapapi.utils.OpenClientUtil;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
 import com.yulu.zhaoxinpeng.mytreasuremap.commons.ActivityUtils;
 import com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView;
@@ -39,7 +40,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 // 宝藏的详情页
-public class TreasureDetailActivity extends AppCompatActivity implements TreasureDetailView {
+public class TreasureDetailActivity extends SwipeBackActivity implements TreasureDetailView {
 
     private static final String KEY_TREASURE = "key_treasure";
     @BindView(R.id.iv_navigation)
@@ -58,6 +59,7 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
     private Treasure mTreasure;
     private ActivityUtils mActivityUtils;
     private TreasureDetailPresenter mDetailPresenter;
+    private SwipeBackLayout mSwipeBackLayout;
 
     /**
      * 对外提供一个方法，跳转到本页面
@@ -74,6 +76,11 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treasure_detail);
         unbinder = ButterKnife.bind(this);
+
+        //实现侧滑关闭 Activity
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+
 
         mActivityUtils = new ActivityUtils(this);
 
@@ -286,11 +293,11 @@ public class TreasureDetailActivity extends AppCompatActivity implements Treasur
             TreasureDetailResult result = list.get(0);
             mTvDetail.setText(result.description);
 
-            if (result.size==0) {
+            if (result.size == 0) {
                 mTvDetailSize.setText("小型");
-            }else if(result.size==1){
+            } else if (result.size == 1) {
                 mTvDetailSize.setText("中等");
-            }else if(result.size==2){
+            } else if (result.size == 2) {
                 mTvDetailSize.setText("大型");
             }
             return;

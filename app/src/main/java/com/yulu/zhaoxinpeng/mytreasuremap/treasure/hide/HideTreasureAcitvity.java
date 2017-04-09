@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.yulu.zhaoxinpeng.mytreasuremap.R;
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+
+
 public class HideTreasureAcitvity extends AppCompatActivity implements HideTreasureView {
 
     @BindView(R.id.hide_send)
@@ -35,6 +38,8 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
     EditText mEtDescription;
     @BindView(R.id.treasure_size_linearlayout)
     LinearLayout mTreasureSizeLinearlayout;
+    @BindView(R.id.treasure_size_tv)
+    TextView mTreasureSizeTv;
     private Unbinder unbinder;
     private static final String KEY_TITLE = "key_title";
     private static final String KEY_ADDRESS = "key_address";
@@ -86,14 +91,17 @@ public class HideTreasureAcitvity extends AppCompatActivity implements HideTreas
         switch (item.getItemId()) {
             case R.id.action_size_mini:
                 mActivityUtils.showToast("小型宝物");
+                mTreasureSizeTv.setText("小型");
                 Size = 0;
                 break;
             case R.id.action_size_medium:
                 mActivityUtils.showToast("中等宝物");
+                mTreasureSizeTv.setText("中等");
                 Size = 1;
                 break;
             case R.id.action_size_large:
                 mActivityUtils.showToast("大型宝物");
+                mTreasureSizeTv.setText("大型");
                 Size = 2;
                 break;
         }

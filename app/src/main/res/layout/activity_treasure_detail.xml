@@ -37,7 +37,10 @@
             android:id="@+id/detail_treasure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"></com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView>
+            android:layout_gravity="center"
+            android:background="@color/colorDrawerBackground">
+
+        </com.yulu.zhaoxinpeng.mytreasuremap.custom.TreasureView>
 
         <include
             layout="@layout/content_detail"

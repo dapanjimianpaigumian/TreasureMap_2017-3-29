@@ -74,6 +74,7 @@
             android:textSize="@dimen/sp_16"/>
 
         <TextView
+            android:id="@+id/treasure_size_tv"
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
