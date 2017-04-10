@@ -16,33 +16,23 @@ public class UploadResult {
      */
 
     @SerializedName("errcode")
-    private String code;
+    private String msg;
+
     @SerializedName("urlcount")
     private int count;
+
     @SerializedName("smallImgUrl")
     private String url;
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    public String getMsg() {
+        return msg;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }

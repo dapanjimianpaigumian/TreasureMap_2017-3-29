@@ -71,4 +71,5 @@
     <string name="mini_size">小型</string>
     <string name="medium_size">中等</string>
     <string name="large_size">大型</string>
+    <string name="uploadPhotoErro">上传图片时发生位置错误</string>
 </resources>

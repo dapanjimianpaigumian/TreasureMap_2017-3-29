@@ -6,6 +6,9 @@ package com.yulu.zhaoxinpeng.mytreasuremap.net;
 
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.MultiUser;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.account.Update;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.account.UpdateResult;
+import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.account.UploadResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.login.LoginResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.register.RegisterResult;
 import com.yulu.zhaoxinpeng.mytreasuremap.treasure.Area;
@@ -19,6 +22,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,6 +71,17 @@ public interface TreasureApi {
     //埋藏宝藏的请求
     @POST("/Handler/TreasureHandler.ashx?action=hide")
     Call<HideTreasureResult> hideTreasure(@Body HideTreasure hideTreasure);
+
+    // 头像的上传
+    @Multipart
+    @POST("/Handler/UserLoadPicHandler1.ashx")
+    Call<UploadResult> upload(@Part MultipartBody.Part part);
+
+    // 用户头像的更新
+    @POST("/Handler/UserHandler.ashx?action=update")
+    Call<UpdateResult> update(@Body Update update);
+
+
     /**
      * 注解：
      * 1. 请求的方式：@GET、@POST、@PUT等

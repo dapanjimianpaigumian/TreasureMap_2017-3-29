@@ -1,6 +1,7 @@
 package com.yulu.zhaoxinpeng.mytreasuremap.net;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yulu.zhaoxinpeng.mytreasuremap.activity.user.User;
 
 import okhttp3.Call;
@@ -29,7 +30,9 @@ public class NetClient {
     //私有的构造方法
     public NetClient() {
 
-        mGson = new Gson();
+        mGson  = new GsonBuilder()
+                .setLenient()// 设置GSON的非严格模式setLenient()
+                .create();
 
         //创建一个日志拦截器
         HttpLoggingInterceptor mInterceptor = new HttpLoggingInterceptor();
@@ -48,7 +51,7 @@ public class NetClient {
                 //将 OkHttpClient 的属性附加给 Retrofit
                 //能这样做的原因可能在于：Retrofit 是对 OkHttpClient 的再封装
                 .client(mOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())//添加格式转换工厂
+                .addConverterFactory(GsonConverterFactory.create(mGson))//添加格式转换工厂
                 .build();
     }
 

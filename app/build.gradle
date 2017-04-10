@@ -72,4 +72,6 @@ dependencies {
     compile files('libs/locSDK_6.13.jar')
     //侧滑关闭 Activity 依赖
     compile 'com.github.liuguangqiang.swipeback:library:1.0.2'
+    // 图片剪切
+    compile 'org.hybridsquad.android.photocropper:library:2.1.0'
 }
